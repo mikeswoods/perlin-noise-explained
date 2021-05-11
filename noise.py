@@ -534,7 +534,7 @@ class NoiseKD(object):
         return 0.5 - np.abs(base_noise)
 
 
-def display(w, h, noise_values, path='.'):
+def render(w, h, noise_values, path='.'):
     def intensity_to_rgb(value):
         v = int(value * 255.0)
         return (v, v, v)
@@ -557,13 +557,11 @@ def display(w, h, noise_values, path='.'):
                     pixels[i, j] = intensity_to_rgb(noise_values[i, j])
         if is_3d:
             print "Writing frame: {n:0>5}".format(n=frame)
-            output = "{path}/image_{n:0>5}.png".format(path=path, n=frame)
+            output = "{path}/output_{n:0>5}.png".format(path=path, n=frame)
         else:
-            output = "{path}/image.png".format(path=path)
+            output = "{path}/output.png".format(path=path)
         with open(output, 'w') as f:
             image.save(f, format="png")
-        if not is_3d:
-            image.show()
 
 
 def raw_noise_in_2d_example(w=200, h=200, freq=DEFAULT_FREQ):
@@ -576,7 +574,7 @@ def raw_noise_in_2d_example(w=200, h=200, freq=DEFAULT_FREQ):
     noise = NoiseKD(2)
     coords = np.array([[i, j] for i in range(w) for j in range(h)])
     values = noise.raw_noise(coords * freq)
-    display(w, h, values.reshape((w, h)))
+    render(w, h, values.reshape((w, h)))
 
 
 def raw_noise_in_3d_example(w=200, h=200, frames=100, freq=DEFAULT_FREQ):
@@ -590,7 +588,7 @@ def raw_noise_in_3d_example(w=200, h=200, frames=100, freq=DEFAULT_FREQ):
     noise = NoiseKD(3)
     coords = np.array([[i, j, k] for i in range(w) for j in range(h) for k in range(frames)])
     values = noise.raw_noise(coords * freq)
-    display(w, h, values.reshape((w, h, frames)))
+    render(w, h, values.reshape((w, h, frames)))
 
 
 def fractal_noise_in_2d_example(w=200, h=200):
@@ -600,7 +598,7 @@ def fractal_noise_in_2d_example(w=200, h=200):
     noise = NoiseKD(2)
     coords = np.array([[i, j] for i in range(w) for j in range(h)])
     values = noise.fractal_noise(coords, freq=1.0/64.0, octaves=6)
-    display(w, h, values.reshape((w, h)))
+    render(w, h, values.reshape((w, h)))
 
 
 def fractal_noise_in_3d_example(w=200, h=200, frames=100):
@@ -614,7 +612,7 @@ def fractal_noise_in_3d_example(w=200, h=200, frames=100):
     noise = NoiseKD(3)
     coords = np.array([[i, j, k] for i in range(w) for j in range(h) for k in range(frames)])
     values = noise.fractal_noise(coords, freq=1.0/64.0, octaves=6)
-    display(w, h, values.reshape((w, h, frames)))
+    render(w, h, values.reshape((w, h, frames)))
 
 
 def ridged_noise_in_2d_example(w=200, h=200):
@@ -626,7 +624,7 @@ def ridged_noise_in_2d_example(w=200, h=200):
     noise = NoiseKD(2)
     coords = np.array([[i, j] for i in range(w) for j in range(h)])
     values = noise.ridged_noise(coords, freq=1.0/64.0, octaves=6)
-    display(w, h, values.reshape((w, h)))
+    render(w, h, values.reshape((w, h)))
 
 
 def ridged_noise_in_3d_example(w=200, h=200, frames=100):
@@ -639,13 +637,14 @@ def ridged_noise_in_3d_example(w=200, h=200, frames=100):
     noise = NoiseKD(3)
     coords = np.array([[i, j, k] for i in range(w) for j in range(h) for k in range(frames)])
     values = noise.ridged_noise(coords, freq=1.0/64.0, octaves=6)
-    display(w, h, values.reshape((w, h, frames)))
+    render(w, h, values.reshape((w, h, frames)))
 
 
 if __name__ == "__main__":
-    #raw_noise_in_2d_example()
+    print "*** Generating examples ***"
+    raw_noise_in_2d_example()
     #raw_noise_in_3d_example()
     #fractal_noise_in_2d_example()
-    fractal_noise_in_3d_example()
+    #fractal_noise_in_3d_example()
     #ridged_noise_in_2d_example()
     #ridged_noise_in_3d_example()
